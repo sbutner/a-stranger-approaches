@@ -4,6 +4,10 @@ from pygame.locals import *
 
 
 
+
+class Interlocutor
+
+
 def listen():
     while 1:
         event = pygame.event.poll()
