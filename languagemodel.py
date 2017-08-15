@@ -1,47 +1,64 @@
+import abc
 import spacy
 from collections import Counter
 
-def calculateEntropy(tuples, frequency, base):
+def calculate_entropy(tuples, frequency, base):
     eta = 0
     for t in tuples:
         eta -= frequency[t] * log(frequency[t])
     return eta
     #negative sum of P(x_i)*log(P(x_i))
 
-class LanguageModel(corpus, ngram, l, c):
-    def __init__(self, corpus, ngram=7, l, c):
-        self.corpus = corpus
-        self.ngram = ngram
-        self.l = 0
-        while n < ngram:
-            self.c += composeFrequencies(corpus, n)
+class BaseLanguageModel(object):
+    __metaclass__ = abc.ABCMeta
+
+    
+
+
+    @abc.abstractmethod
+    def get_entropy(self):
+        """Method should accept raw text input and return Shannon entropy
+        of the input w.r.t. the language model"""
+
+    @abc.abstractmethod
+    def generate_text(self):
+        """Method should return raw text output"""
+
+    @abc.abstractmethod
+    def update(self):
+        """Method should alter the language model's state as appropriate"""
+
+
+class HiddenMarkovLM(BaseLanguageModel):
+    """Markov Chain based language model
+
+    Attributes
+
+    Methods
+
+    """
+    
+    def __init__(self, corpus):
+        self._l = 0
+        self._c = Counter()
+        self.update(corpus)
+        
+    def update(self, text):
+        while n < 4:
+            for ngram in self.compose_ngrams(text, n):
+                _c[ngram] += 1
             n += 1
-    def composeFrequencies(self,corpus, ngram):
-        c = Counter()
-        for doc in corpus:
-            t = ngramCorpus(doc, ngram)
-            l += gatherLength(doc)
-            c += gatherFrequencies(t)
-        for key in c:
-            c[key] = float(c[key]) / l
-        return c
-    def gatherFrequencies(self,tuples):
-        count = Counter()
-        for tup in tuples:
-            count[tup] += 1
-        return count
-    def gatherLength(self,doc):
-        length = len(doc)
-        return length
-    def ngramCorpus(self,doc, ngram):
+            
+    @staticmethod
+    def compose_ngrams(self,doc,ngram):
         i = 0
         out = []
         length = len(doc)
-        for sentence in corpus:
+        for sentence in doc:
             if len(sentence) < 1:
                 pass
             while i < (len(sentence) - ngram - 2):
                 ngrm = (sentence[i:(i+2)].text,sentence[i+3].text)
-                i += 1
                 out.append(ngrm)
+                i += 1
         return out
